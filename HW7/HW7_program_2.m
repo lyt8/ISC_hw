@@ -27,16 +27,20 @@ for k = 1:length(n_list)
     end
     fdm_u_old = fdm_u;
     plot(fdm_x, fdm_u); hold on;
+    fprintf('n = %4d, res = ', n_list(k));
+    for i = 1:5
+        fprintf('%.4e, ', res(i));
+    end
+    fprintf('\n');
 
-    fprintf('n = %4d, res = %.6e\n', n_list(k), fdm_res);
 end
 grid on;
 xlabel('x'); 
 ylabel('u');
 
 % Calculate and display the error norms
-    for k = 2: num_n -1
-        fprintf('Error between n = %4d and n = %4d: %.6e\n', n_list(k-1), n_list(k), err);
+    for k = 2: num_n 
+        fprintf('Error between n = %4d and n = %4d: %.6e\n', n_list(k-1), n_list(k), err_n(k-1));
     end
 
 %----------function-------------
@@ -72,6 +76,4 @@ function [norm_res,fdm_u] = finite_difference_method(u_0, n)
 
     detla = [0, x, 0];
     fdm_u = fdm_u + detla;
-
-
 end

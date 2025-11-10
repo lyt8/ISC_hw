@@ -3,7 +3,7 @@ N = 500000;
 plot_x = linspace(0, 1, N+1);
 y = u(plot_x, @f);
 
-n_list = [3000,6000,12000,24000,48000,96000,192000];  
+n_list = [750,1500,3000,6000,12000,24000,48000,96000,192000];  
 errors = zeros(size(n_list));  
 
 fdm_x = linspace(0, 1, n_list(1)+1);
@@ -16,7 +16,7 @@ for k = 1:length(n_list)
     fdm_u_new = finite_difference_method(fdm_x_new, n, @f);
 
     u_on_fem_x = interp1(plot_x, y, fdm_x_new);
-    maxerr   = max(abs(fdm_u_new - u_on_fem_x));
+    maxerr   = norm(fdm_u_new - u_on_fem_x);
     errors(k) = maxerr;
 
     rich(k) = richardson(fdm_x_new, fdm_u_new, fdm_u, fdm_x);
@@ -27,15 +27,15 @@ end
 
 %-----------figure-------------
 figure;
-plot(plot_x, y); hold on;
-plot(fdm_x, fdm_u, '--');
-legend('Reference Solution', 'Finite Difference Method');
+plot(plot_x, y, 'LineWidth',3); hold on;
+plot(fdm_x, fdm_u, '--', 'LineWidth',3);
+legend('Reference Solution', 'Finite Difference Method(n=192000)');
 xlabel('x');
 ylabel('u(x)');
 grid on;
 
 figure;
-plot(1./n_list, errors, 'o-', 'LineWidth', 1.5);
+plot(1./n_list(2:end), errors(2:end), 'o-', 'LineWidth', 3);
 xlabel('Grid Spacing (h)');
 ylabel('Max Error');
 title('Error Analysis of Finite Difference Method');
@@ -88,5 +88,5 @@ end
 
 function rich = richardson(fdm_x_new, fdm_u_new, fdm_u, fdm_x)
     u_fine_interp = interp1(fdm_x_new, fdm_u_new, fdm_x);
-    rich = max(abs(u_fine_interp - fdm_u)) / 3;
+    rich = norm(u_fine_interp - fdm_u) / 3;
 end
