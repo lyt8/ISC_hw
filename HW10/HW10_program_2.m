@@ -3,7 +3,7 @@ M = 4096;
 plot_x = linspace(0, 1, M + 1);
 dt =  1 / 10 ^ (floor(log10(2 * M^2)) + 1);
 mu = dt * M ^ 2;
-ref_u = fdm_step(plot_x, mu, dt, M);
+ref_u = mol_step(plot_x, M);
 
 n_list = 2 .^ (3:9);
 n_length = length(n_list);
@@ -28,7 +28,7 @@ for i = 1: n_length
     if i == 1
         fprintf('error of fdm = %6d, order = none\n', error_fdm(1));
     else
-        fprintf('error of fdm = %6d, order = %6d\n', error_fdm(i), error_fdm(i-1) / error_fdm(i));
+        fprintf('error of fdm = %6d, order = %6d\n', error_fdm(i), log(error_fdm(i-1) / error_fdm(i)) / log(2));
     end
 end
 
@@ -36,7 +36,7 @@ for i = 1: n_length
     if i == 1
         fprintf('error of mol = %6d, order = none\n', error_mol(1));
     else
-        fprintf('error of mol = %6d, order = %6d\n', error_mol(i), error_mol(i-1) / error_mol(i));
+        fprintf('error of mol = %6d, order = %6d\n', error_mol(i), log(error_mol(i-1) / error_mol(i)) / log(2));
     end
 end
 
