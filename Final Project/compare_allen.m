@@ -32,9 +32,9 @@ view([-45 60]), colormap(cool), light('col',[1 1 0],'pos',[-10 0 10])
 
 %----------------function----------------
 
-%-------------RK coefficients()integral------------
+%-------------RK coefficients(integral)------------
 function [f1, f2, f3, Q] = coe_counter(L, N, h)
-    M = 32; % no. of points for resolvent integral
+    M = 32; 
     r = 15*exp(1i*pi*((1:M)-.5)/M); % points along complex circle
     A = h*L;
 
@@ -44,9 +44,9 @@ function [f1, f2, f3, Q] = coe_counter(L, N, h)
         z = r(j);
         zIA = (z*I - A) \ I;
         
-        Q     = Q     + h*zIA*(exp(z/2)-1);
+        Q = Q + h*zIA*(exp(z/2)-1);
         f1 = f1 + h*zIA*(-4-z+exp(z)*(4-3*z+z^2))/z^2;
-        f2  = f2  + h*zIA*(2+z+exp(z)*(z-2))/z^2;
+        f2 = f2 + h*zIA*(2+z+exp(z)*(z-2))/z^2;
         f3 = f3 + h*zIA*(-4-3*z-z^2+exp(z)*(4-z))/z^2;
     end
     f1 = real(f1/M); f2 = real(f2/M); f3 = real(f3/M); Q = real(Q/M);
